@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"bubble/setting"
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	// mysql驱动
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -10,10 +13,15 @@ import (
 var DB *gorm.DB
 
 // InitMysql 初始化数据库
-func InitMysql() (err error) {
-	dsn := "root:root@(127.0.0.1:3306)/bubble?charset=utf8&parseTime=True&loc=Local"
+func InitMysql(Cfg *setting.MysqlCfg) (err error) {
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		Cfg.User, Cfg.Password, Cfg.Host, Cfg.Port, Cfg.DbName)
+	fmt.Println(dsn)
 	DB, err = gorm.Open("mysql", dsn)
-	return
+	if err != nil {
+		return
+	}
+	return DB.DB().Ping()
 }
 
 // Close 向外暴露一个close函数

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bubble/dao"
+	"bubble/logger"
 	"bubble/models"
 	"bubble/routers"
 	"bubble/setting"
@@ -17,6 +18,12 @@ func main() {
 	// 加载配置文件
 	if err := setting.Init(os.Args[1]); err != nil {
 		fmt.Printf("init config failed, err:%v\n", err)
+		return
+	}
+
+	// 初始化logger
+	if err := logger.InitLogger(setting.Cfg.LogConfig); err != nil {
+		fmt.Printf("init logger failed, err:%v\n", err)
 		return
 	}
 	// 手动创建数据库

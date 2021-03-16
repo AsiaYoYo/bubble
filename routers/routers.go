@@ -2,13 +2,15 @@ package routers
 
 import (
 	"bubble/controller"
+	"bubble/logger"
 
 	"github.com/gin-gonic/gin"
 )
 
 // SetupRouters 定义路由
 func SetupRouters() *gin.Engine {
-	r := gin.Default()
+	r := gin.New()
+	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	r.LoadHTMLGlob("templates/*")
 	r.Static("./static", "static")
